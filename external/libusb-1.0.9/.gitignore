@@ -13,3 +13,12 @@ examples/.deps/*
 /libtool
 /libusb-1.0.pc
 /stamp-h1
+*.ilk
+*.htm
+*.obj
+*.tlog
+*.log
+*.lastbuildstate
+*.sdf
+*.suo
+*.opensdf
