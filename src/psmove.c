@@ -88,7 +88,7 @@
 #define PSMOVE_BUFFER_SIZE 49
 
 /* Buffer size for the Bluetooth address get request */
-#define PSMOVE_BTADDR_GET_SIZE 16
+#define PSMOVE_BTADDR_GET_SIZE 17
 
 /* Buffer size for the Bluetooth address set request */
 #define PSMOVE_BTADDR_SET_SIZE 23

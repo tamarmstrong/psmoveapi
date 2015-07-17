@@ -87,6 +87,9 @@ int main(int arg, char** args) {
         }
     }
 
+	psmove_tracker_set_exposure(tracker, Exposure_MEDIUM);  //Exposure_LOW, Exposure_MEDIUM, Exposure_HIGH
+	psmove_tracker_set_dimming(tracker, 1.0f);	
+	
     while ((cvWaitKey(1) & 0xFF) != 27) {
         psmove_tracker_update_image(tracker);
         psmove_tracker_update(tracker, NULL);

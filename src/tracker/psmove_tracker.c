@@ -535,7 +535,7 @@ psmove_tracker_new_with_camera(int camera) {
 	tracker->rHSV = cvScalar(COLOR_FILTER_RANGE_H, COLOR_FILTER_RANGE_S, COLOR_FILTER_RANGE_V, 0);
 	tracker->storage = cvCreateMemStorage(0);
 
-        tracker->dimming_factor = 0.;
+	tracker->dimming_factor = 1.;
 
 	tracker->calibration_t = CALIBRATION_DIFF_T;
 	tracker->tracker_t1 = TRACKER_QUALITY_T1;
