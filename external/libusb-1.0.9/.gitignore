@@ -1,0 +1,15 @@
+Makefile
+examples/.deps/*
+libusb/.deps/*
+libusb/.libs/*
+libusb/*.o
+libusb/*.lo
+libusb/*.la
+libusb/*.pc
+examples/.deps/*
+/config.h
+/config.log
+/config.status
+/libtool
+/libusb-1.0.pc
+/stamp-h1
