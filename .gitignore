@@ -1,6 +1,10 @@
-include/psmove_config.h
-build*
-Makefile
 /opencv
 /Win32
 /x64
+include/psmove_config.h
+build*
+Makefile
+*.user
+*.opensdf
+*.sdf
+*.suo
