@@ -30,15 +30,18 @@
 #include <stdio.h>
 
 #include <time.h>
-#include <unistd.h>
 #include <assert.h>
 #include <math.h>
-#include <stdlib.h>
 
 #include <list>
 
+#ifdef WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif // WIN32
+
 #include "psmove_examples_opengl.h"
-#include <SDL/SDL.h>
 
 #include "psmove.h"
 #include "psmove_tracker.h"
@@ -48,7 +51,6 @@ enum {
     NOTHING,
     WIRE_CUBE,
     SOLID_CUBE,
-    SOLID_TEAPOT,
     ITEM_MAX,
 };
 
@@ -144,13 +146,29 @@ class Tracker {
 };
 
 Tracker::Tracker()
-    : m_moves(NULL),
-      m_count(psmove_count_connected()),
-      m_tracker(psmove_tracker_new()),
-      m_fusion(psmove_fusion_new(m_tracker, 1., 1000.))
+	: m_moves(NULL),
+	m_count(0),
+	m_tracker(NULL),
+	m_fusion(NULL)
 {
-    psmove_tracker_set_mirror(m_tracker, PSMove_True);
-    psmove_tracker_set_exposure(m_tracker, Exposure_HIGH);
+	if (!psmove_init(PSMOVE_CURRENT_VERSION)) {
+		fprintf(stderr, "PS Move API init failed (wrong version?)\n");
+		exit(1);
+	}
+
+	m_count = psmove_count_connected();
+
+	m_tracker = psmove_tracker_new();
+
+	if (m_tracker == NULL) {
+		fprintf(stderr, "No tracker available! (Missing camera?)\n");
+		exit(1);
+	}
+
+	m_fusion = psmove_fusion_new(m_tracker, 1., 1000.);
+
+	psmove_tracker_set_mirror(m_tracker, PSMove_True);
+	psmove_tracker_set_exposure(m_tracker, Exposure_LOW);
 
     m_moves = (PSMove**)calloc(m_count, sizeof(PSMove*));
     m_items = (int*)calloc(m_count, sizeof(int));
@@ -174,6 +192,7 @@ Tracker::~Tracker()
     }
     free(m_items);
     free(m_moves);
+	psmove_shutdown();
 }
 
 void
@@ -298,7 +317,7 @@ Tracker::render()
 
             glLightfv(GL_LIGHT0, GL_DIFFUSE, particle->color);
 
-            glutSolidCube(.5);
+            drawSolidCube(.5);
             glPopMatrix();
         }
         glDisable(GL_LIGHTING);
@@ -310,81 +329,88 @@ Tracker::render()
 
         if (m_items[i] == WIRE_CUBE) {
             glColor3f(1., 0., 0.);
-            glutWireCube(1.);
+            drawWireCube(1.);
             glColor3f(0., 1., 0.);
 
             glPushMatrix();
             glScalef(1., 1., 4.5);
             glTranslatef(0., 0., -.5);
-            glutWireCube(1.);
+            drawWireCube(1.);
             glPopMatrix();
 
             glColor3f(0., 0., 1.);
-            glutWireCube(3.);
+            drawWireCube(3.);
         } else if (m_items[i] == SOLID_CUBE) {
             glEnable(GL_LIGHTING);
             float diffuse[] = {.5, 0., 0., 1.};
             glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-            glutSolidCube(2.);
-            glDisable(GL_LIGHTING);
-        } else if (m_items[i] == SOLID_TEAPOT) {
-            glEnable(GL_LIGHTING);
-            float diffuse[] = {0., .5, 0., 1.};
-            glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-            glPushMatrix();
-            glRotatef(90., 1., 0., 0.);
-            glutSolidTeapot(1.);
-            glPopMatrix();
+            drawSolidCube(2.);
             glDisable(GL_LIGHTING);
         }
     }
 }
 
-
 class Renderer {
-    public:
-        Renderer(Tracker &tracker);
-        ~Renderer();
+public:
+	Renderer(Tracker &tracker);
+	~Renderer();
 
-        void init();
-        void render();
-    private:
-        SDL_Surface *m_display;
-        Tracker &m_tracker;
+	void init();
+	void render();
+private:
+	SDL_Window *m_window;
+	SDL_GLContext m_glContext;
+	Tracker &m_tracker;
 };
 
 Renderer::Renderer(Tracker &tracker)
-    : m_display(NULL),
-      m_tracker(tracker)
+	: m_window(NULL),
+	m_glContext(NULL),
+	m_tracker(tracker)
 {
-    SDL_Init(SDL_INIT_VIDEO);
-    m_display = SDL_SetVideoMode(640, 480, 0, SDL_OPENGL);
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		sdlDie("Unable to initialize SDL");
+	}
+
+	m_window = SDL_CreateWindow("OpenGL Test2",
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		640, 480,
+		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	if (m_window == NULL)
+	{
+		sdlDie("Unable to initialize SDL");
+	}
+	checkSDLError(__LINE__);
+
+	m_glContext = SDL_GL_CreateContext(m_window);
+	checkSDLError(__LINE__);
 }
 
 Renderer::~Renderer()
 {
-    SDL_Quit();
+	// Once finished with OpenGL functions, the SDL_GLContext can be deleted.
+	SDL_GL_DeleteContext(m_glContext);
+	SDL_Quit();
 }
 
 void
 Renderer::init()
 {
-    char *argv[] = { NULL };
-    int argc = 0;
-    glutInit(&argc, argv);
-    glClearColor(0., 0., 0., 1.);
+	glClearColor(0., 0., 0., 1.);
 
-    glViewport(0, 0, 640, 480);
+	glViewport(0, 0, 640, 480);
 
-    glEnable(GL_LIGHT0);
-    glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void
 Renderer::render()
 {
-    m_tracker.render();
-    SDL_GL_SwapBuffers();
+	m_tracker.render();
+	SDL_GL_SwapWindow(m_window);
 }
 
 class Main {

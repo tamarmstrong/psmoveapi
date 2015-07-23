@@ -27,9 +27,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  **/
 
-
-
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -62,6 +59,11 @@ setup(struct TestContext *context)
 {
     int i;
 
+	if (!psmove_init(PSMOVE_CURRENT_VERSION)) {
+		fprintf(stderr, "PS Move API init failed (wrong version?)\n");
+		exit(1);
+	}
+
     context->count = psmove_count_connected();
     context->tracker = psmove_tracker_new();
     psmove_tracker_set_mirror(context->tracker, PSMove_True);
@@ -90,6 +92,7 @@ teardown(struct TestContext *context)
 
     free(context->moves);
     psmove_tracker_free(context->tracker);
+	psmove_shutdown();
 }
 
 #define ITERATIONS 500
@@ -99,7 +102,7 @@ save(int i, int roi_size, struct TestContext *context)
 {
     void *frame = psmove_tracker_get_frame(context->tracker);
     char path[512];
-    snprintf(path, sizeof(path), "roi_perf_%03d_%03d.jpg", roi_size, i);
+	_snprintf_s(path, sizeof(path), _TRUNCATE, "roi_perf_%03d_%03d.jpg", roi_size, i);
     int imgParams[] = { CV_IMWRITE_JPEG_QUALITY, 90, 0 };
     cvSaveImage(path, frame, imgParams);
 }
@@ -110,10 +113,10 @@ main(int argc, char *argv[])
     printf("\n -- PS Move API ROI Performance Test -- \n\n");
     int roi_sizes[] = {480, 240, 120};
     int roi;
-    int rois = sizeof(roi_sizes)/sizeof(roi_sizes[0]);
+	int rois = _countof(roi_sizes);
 
-    float data[ITERATIONS][rois];
-    float position[ITERATIONS][rois][3]; // x, y, r
+    float data[ITERATIONS][_countof(roi_sizes)];
+	float position[ITERATIONS][_countof(roi_sizes)][3]; // x, y, r
 
     /**
      * Test file for this test is available from:
@@ -121,15 +124,13 @@ main(int argc, char *argv[])
      *
      * You need to have exactly one controller connected.
      **/
-    putenv(PSMOVE_TRACKER_FILENAME_ENV "=test_roi_size.avi");
-    putenv(PSMOVE_TRACKER_COLOR_ENV "=723a8c");
+	psmove_util_set_env_string(PSMOVE_TRACKER_FILENAME_ENV, "test_roi_size.avi");
+	psmove_util_set_env_string(PSMOVE_TRACKER_COLOR_ENV, "723a8c");
 
-    for (roi=0; roi<rois; roi++) {
+    for (roi=0; roi<rois; roi++) 
+	{
         printf("Testing tracking performance: %d\n", roi_sizes[roi]);
-
-        char tmp[strlen(PSMOVE_TRACKER_ROI_SIZE_ENV) + 10];
-        sprintf(tmp, "%s=%d", PSMOVE_TRACKER_ROI_SIZE_ENV, roi_sizes[roi]);
-        putenv(tmp);
+		psmove_util_set_env_int(PSMOVE_TRACKER_ROI_SIZE_ENV, roi_sizes[roi]);
 
         struct TestContext context;
         setup(&context);
@@ -141,11 +142,11 @@ main(int argc, char *argv[])
 
             int j;
             for (j=0; j<context.count; j++) {
-                PSMove_timestamp track_begin = _psmove_timestamp();
+                PSMove_timestamp track_begin = psmove_timestamp();
                 psmove_tracker_update(context.tracker, context.moves[j]);
-                PSMove_timestamp track_end = _psmove_timestamp();
+                PSMove_timestamp track_end = psmove_timestamp();
 
-                float tracking = _psmove_timestamp_value(_psmove_timestamp_diff(track_end, track_begin));
+                float tracking = (float)psmove_timestamp_value(psmove_timestamp_diff(track_end, track_begin));
                 data[i][roi] = tracking;
 
                 float x, y, r;
@@ -164,7 +165,7 @@ main(int argc, char *argv[])
         teardown(&context);
     }
 
-    FILE *fp = fopen("roi_size.csv", "w");
+    FILE *fp = psmove_file_open("roi_size.csv", "w");
     assert(fp != NULL);
 
     /* Header */
@@ -196,7 +197,7 @@ main(int argc, char *argv[])
         fprintf(fp, "\n");
     }
 
-    fclose(fp);
+    psmove_file_close(fp);
 
     return 0;
 }

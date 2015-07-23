@@ -31,11 +31,12 @@
 
 #include <stdio.h>
 
-#include "psmove.h"
-
 #ifdef WIN32
 #    include <windows.h>
 #endif
+
+#include "psmove.h"
+#include "../../src/tracker/camera_control.h"
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/calib3d/calib3d.hpp"
@@ -47,6 +48,7 @@
 #define ESC_KEY 27
 #define TEXT_COLOR cvScalar(0xFF, 0xFF, 0xFF, 0)
 #define TEXT_POS cvPoint(20,30)
+#define CAMERA_EXPOSURE 0xffff
 
 #define INTRINSICS_XML "intrinsics.xml"
 #define DISTORTION_XML "distortion.xml"
@@ -57,16 +59,42 @@ void put_text(IplImage* img, const char* text) {
 }
 
 int main(int arg, char** args) {
-	int board_w = 4; // Board width in squares
-	int board_h = 7; // Board height
-	int n_boards = 10; // Number of boards
-	int board_n = board_w * board_h;
+	const int board_w = 9; // Board width in squares
+	const int board_h = 6; // Board height
+	const int n_boards = 10; // Number of boards
+	const int board_n = board_w * board_h;
 	int user_canceled = 0;
 	CvSize board_sz = cvSize(board_w, board_h);
-	CvCapture* capture = cvCreateCameraCapture(CAM_TO_USE);
 
-        char *intrinsics_xml = psmove_util_get_file_path(INTRINSICS_XML);
-        char *distortion_xml = psmove_util_get_file_path(DISTORTION_XML);
+	if (!psmove_init(PSMOVE_CURRENT_VERSION)) {
+		fprintf(stderr, "PS Move API init failed (wrong version?)\n");
+		exit(1);
+	}
+
+	//CvCapture* capture = cvCreateCameraCapture(CAM_TO_USE);
+	CameraControl *cameraControl = camera_control_new(CAM_TO_USE); // Returns NULL if no control found.
+	if (cameraControl == NULL)
+	{
+		fprintf(stderr, "Failed to initialize camera %d\n", CAM_TO_USE);
+		exit(1);
+	}
+
+	// Set the default camera settings
+	camera_control_set_parameters(
+		cameraControl, 
+		0,					// Auto Exposure, range[0 - 0xFFFF]
+		0,					// Auto Gain, range[0 - 0xFFFF]
+		0,					// Auto White Balance, range[0 - 0xFFFF]
+		CAMERA_EXPOSURE,	// Exposure, range[0 - 0xFFFF]
+		0,					// Gain, range[0 - 0xFFFF]
+		0xffff,				// White Balance (Red), range[0 - 0xFFFF]
+		0xffff,				// White Balance (Green), range[0 - 0xFFFF]
+		0xffff,				// White Balance (Blue), range[0 - 0xFFFF]
+		-1,					// Contrast (unused)
+		-1);				// Brightness (unused)
+
+	char *intrinsics_xml = psmove_util_get_file_path(INTRINSICS_XML);
+	char *distortion_xml = psmove_util_get_file_path(DISTORTION_XML);
 
 	// Allocate Memory
 	CvMat* image_points = cvCreateMat(n_boards * board_n, 2, CV_32FC1);
@@ -87,25 +115,37 @@ int main(int arg, char** args) {
 	int step = 0;
 
 	while (1) {
+		enum PSMove_Bool new_frame = PSMove_False;
+
 		cvWaitKey(10);
-		image = cvQueryFrame(capture);
-		if (image)
+		//image = cvQueryFrame(capture);
+		image = camera_control_query_frame(cameraControl, NULL, NULL, &new_frame);
+
+		if (image && new_frame == PSMove_True)
 			break;
 	}
-	CvSize small_size = cvSize((int) (image->width * 0.5), ((int) image->height * 0.5));
+
+	CvSize small_size = cvSize(image->width/2, image->height/2);
 	IplImage* small_image = cvCreateImage(small_size, image->depth, 3);
 
 	IplImage *gray_image1 = cvCreateImage(cvGetSize(image), image->depth, 1);
 	IplImage *gray_image2 = cvCreateImage(cvGetSize(image), image->depth, 1);
+
 	// Capture Corner views loop until we've got n_boards
-	// succesful captures (all corners on the board are found)
-	while (successes < n_boards) {
+	// successful captures (all corners on the board are found)
+	while (successes < n_boards) 
+	{
+		enum PSMove_Bool new_frame = PSMove_False;
 		int key = cvWaitKey(1);
+		
 		user_canceled = key == ESC_KEY;
+
 		if (user_canceled)
 			break;
 
-		image = cvQueryFrame(capture); // Get next image
+		//image = cvQueryFrame(capture); // Get next image
+		image = camera_control_query_frame(cameraControl, NULL, NULL, &new_frame);
+
 		cvCvtColor(image, gray_image1, CV_BGR2GRAY);
 		corner_count = 0;
 		int has_checkBoard = cvCheckChessboard(gray_image1, board_sz);
@@ -120,7 +160,7 @@ int main(int arg, char** args) {
 			cvDrawChessboardCorners(image, board_sz, corners, corner_count, found);
 
 			char text[222];
-			sprintf(text, "capured %d/%d (press 'SPACE' to capture!)", successes, n_boards);
+			sprintf_s(text, _countof(text), "capured %d/%d (press 'SPACE' to capture!)", successes, n_boards);
 
 			if (corner_count == board_n)
 				put_text(image, text);
@@ -128,17 +168,20 @@ int main(int arg, char** args) {
 				put_text(image, "press 'ESC' to exit");
 
 			// If we got a good board, add it to our data
-			if (corner_count == board_n && key == SPACE_KEY) {
+			if (corner_count == board_n 
+				&& key == SPACE_KEY
+				) {
 				step = successes * board_n;
 				for (i = step, j = 0; j < board_n; ++i, ++j) {
 					CV_MAT_ELEM( *image_points, float, i, 0 ) = corners[j].x;
 					CV_MAT_ELEM( *image_points, float, i, 1 ) = corners[j].y;
-					CV_MAT_ELEM( *object_points, float, i, 0 ) = j / board_w;
-					CV_MAT_ELEM( *object_points, float, i, 1 ) = j % board_w;
+					CV_MAT_ELEM( *object_points, float, i, 0 ) = (float)j / (float)board_w;
+					CV_MAT_ELEM( *object_points, float, i, 1 ) = (float)(j % board_w);
 					CV_MAT_ELEM( *object_points, float, i, 2 ) = 0.0f;
 				}
 				CV_MAT_ELEM( *point_counts, int, successes, 0 ) = board_n;
 				successes++;
+				fprintf(stdout, text);
 			}
 		} else {
 			put_text(image, "press 'ESC' to exit");
@@ -147,7 +190,10 @@ int main(int arg, char** args) {
 		cvShowImage("Calibration", small_image);
 	}
 
-	if (!user_canceled) {
+	if (!user_canceled) 
+	{
+		enum PSMove_Bool new_frame = PSMove_False;
+
 		// Allocate matrices according to how many chessboards found
 		CvMat* object_points2 = cvCreateMat(successes * board_n, 3, CV_32FC1);
 		CvMat* image_points2 = cvCreateMat(successes * board_n, 2, CV_32FC1);
@@ -191,7 +237,9 @@ int main(int arg, char** args) {
 		CvMat *intrinsic = (CvMat*) cvLoad(intrinsics_xml, 0, 0, 0);
 		CvMat *distortion = (CvMat*) cvLoad(distortion_xml, 0, 0, 0);
 
-		image = cvQueryFrame(capture);
+		//image = cvQueryFrame(capture);
+
+		image = camera_control_query_frame(cameraControl, NULL, NULL, &new_frame);
 
 		// Build the undistort map that we will use for all subsequent frames
 		IplImage* mapx = cvCreateImage(cvGetSize(image), IPL_DEPTH_32F, 1);
@@ -222,7 +270,8 @@ int main(int arg, char** args) {
 			}
 			if (c == ESC_KEY)
 				break;
-			image = cvQueryFrame(capture);
+			//image = cvQueryFrame(capture);
+			image = camera_control_query_frame(cameraControl, NULL, NULL, &new_frame);
 		}
 
 		cvReleaseMat(&intrinsic_matrix);
@@ -234,13 +283,15 @@ int main(int arg, char** args) {
 		cvReleaseImage(&mapx);
 		cvReleaseImage(&mapy);
 	}
-	cvReleaseCapture(&capture);
+
+	//cvReleaseCapture(&capture);
+	camera_control_delete(cameraControl);
 	cvReleaseImage(&small_image);
 	cvReleaseImage(&gray_image1);
 	cvReleaseImage(&gray_image2);
 
-        free(intrinsics_xml);
-        free(distortion_xml);
+	free(intrinsics_xml);
+	free(distortion_xml);
 
 	return 0;
 }

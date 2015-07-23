@@ -36,8 +36,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <libgen.h>
 #include <math.h>
+
+#ifdef CMAKE_BUILD
+#include <libgen.h>
+#endif
 
 #define PSMOVE_CALIBRATION_EXTENSION ".calibration"
 
@@ -266,21 +269,21 @@ psmove_calibration_new(PSMove *move)
         return NULL;
     }
 
-    for (i=0; i<strlen(serial); i++) {
+    for (i=0; i<(int)strlen(serial); i++) {
         if (serial[i] == ':') {
             serial[i] = '_';
         }
     }
 
-    char *template = malloc(strlen(serial) +
-            strlen(PSMOVE_CALIBRATION_EXTENSION) + 1);
-    strcpy(template, serial);
-    strcat(template, PSMOVE_CALIBRATION_EXTENSION);
+	size_t calibration_filename_length = strlen(serial) + strlen(PSMOVE_CALIBRATION_EXTENSION) + 1;
+	char *calibration_filename = (char *)malloc(calibration_filename_length);
+	strcpy_s(calibration_filename, calibration_filename_length, serial);
+	strcat_s(calibration_filename, calibration_filename_length, PSMOVE_CALIBRATION_EXTENSION);
 
-    calibration->filename = psmove_util_get_file_path(template);
-    calibration->system_filename = psmove_util_get_system_file_path(template);
+    calibration->filename = psmove_util_get_file_path(calibration_filename);
+    calibration->system_filename = psmove_util_get_system_file_path(calibration_filename);
 
-    free(template);
+    free(calibration_filename);
     free(serial);
 
     /* Try to load the calibration data from disk, or from USB */
@@ -302,7 +305,7 @@ psmove_calibration_new(PSMove *move)
 
         /**
          *
-         * Calculation of accelermeter mapping (as factor of gravity, 1g):
+         * Calculation of accelerometer mapping (as factor of gravity, 1g):
          *
          *                2 * (raw - low)
          *  calibrated = ----------------  - 1
@@ -379,7 +382,7 @@ psmove_calibration_new(PSMove *move)
         psmove_calibration_get_usb_gyro_values(calibration,
                 &gx80, &gy80, &gz80);
 
-        float factor = (2.f * M_PI * 80.f) / 60.f;
+		float factor = (float)((2.0 * M_PI * 80.0) / 60.0);
         calibration->gx = factor / (float)gx80;
         calibration->gy = factor / (float)gy80;
         calibration->gz = factor / (float)gz80;
@@ -485,32 +488,32 @@ int
 psmove_calibration_load(PSMoveCalibration *calibration)
 {
     psmove_return_val_if_fail(calibration != NULL, 0);
-    FILE *fp;
+    FILE *fp= psmove_file_open(calibration->filename, "rb");
 
-    fp = fopen(calibration->filename, "rb");
-    if (fp == NULL) {
+	if (fp == NULL) {
         // use system file in case local is not available
-        fp = fopen(calibration->system_filename, "rb");
-        if (fp == NULL) {
+		fp = psmove_file_open(calibration->system_filename, "rb");
+		if (fp == NULL) 
+		{
             return 0;
         }
-        return 0;
     }
 
     if (fread(calibration->usb_calibration,
               sizeof(calibration->usb_calibration), 1, fp) != 1) {
         psmove_CRITICAL("Unable to read USB calibration");
-        fclose(fp);
-        return 0;
-    }
-    if (fread(&(calibration->flags),
-              sizeof(calibration->flags), 1, fp) != 1) {
-        psmove_CRITICAL("Unable to read USB calibration");
-        fclose(fp);
+        psmove_file_close(fp);
         return 0;
     }
 
-    fclose(fp);
+    if (fread(&(calibration->flags),
+              sizeof(calibration->flags), 1, fp) != 1) {
+        psmove_CRITICAL("Unable to read USB calibration");
+		psmove_file_close(fp);
+        return 0;
+    }
+
+	psmove_file_close(fp);
     return 1;
 }
 
@@ -519,10 +522,9 @@ psmove_calibration_save(PSMoveCalibration *calibration)
 {
     psmove_return_val_if_fail(calibration != NULL, 0);
 
-    FILE *fp;
+    FILE *fp= psmove_file_open(calibration->filename, "wb");
 
-    fp = fopen(calibration->filename, "wb");
-    if (fp == NULL) {
+	if (fp == NULL) {
         psmove_CRITICAL("Unable to write USB calibration");
         return 0;
     }
@@ -531,7 +533,7 @@ psmove_calibration_save(PSMoveCalibration *calibration)
                sizeof(calibration->usb_calibration),
                1, fp) != 1) {
         psmove_CRITICAL("Unable to write USB calibration");
-        fclose(fp);
+        psmove_file_close(fp);
         return 0;
     }
 
@@ -539,11 +541,11 @@ psmove_calibration_save(PSMoveCalibration *calibration)
                sizeof(calibration->flags),
                1, fp) != 1) {
         psmove_CRITICAL("Unable to write USB calibration");
-        fclose(fp);
+		psmove_file_close(fp);
         return 0;
     }
 
-    fclose(fp);
+	psmove_file_close(fp);
     return 1;
 }
 

@@ -2,3 +2,5 @@ include/psmove_config.h
 build*
 Makefile
 /opencv
+/Win32
+/x64

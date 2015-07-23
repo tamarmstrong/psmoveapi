@@ -45,7 +45,7 @@
 #endif
 
 #if defined(CAMERA_CONTROL_USE_PS3EYE_DRIVER)
-#    include "ps3eyedriver.h"
+#    include "../external/PS3EYEDriver/src/ps3eyedriver.h"
 #endif
 
 struct _CameraControl {
@@ -60,10 +60,10 @@ struct _CameraControl {
 #endif
 
 #if defined(CAMERA_CONTROL_USE_PS3EYE_DRIVER)
-        ps3eye_t *eye;
-        int width;
-        int height;
-        IplImage *framebgr;
+	ps3eye_t *eye;
+	int width;
+	int height;
+	IplImage *framebgr;
 #endif
 
 	CvCapture* capture;
@@ -71,7 +71,7 @@ struct _CameraControl {
 	IplImage* mapx;
 	IplImage* mapy;
 
-        enum PSMove_Bool deinterlace;
+	enum PSMove_Bool deinterlace;
 };
 
 #endif

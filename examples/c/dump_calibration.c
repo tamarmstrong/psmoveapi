@@ -28,7 +28,6 @@
  **/
 
 
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,6 +40,11 @@ main(int argc, char* argv[])
     PSMove *move;
     int i;
     int count;
+
+	if (!psmove_init(PSMOVE_CURRENT_VERSION)) {
+		fprintf(stderr, "PS Move API init failed (wrong version?)\n");
+		exit(1);
+	}
 
     if ((count = psmove_count_connected()) < 1) {
         fprintf(stderr, "No controllers connected.\n");
@@ -58,6 +62,8 @@ main(int argc, char* argv[])
         psmove_dump_calibration(move);
         psmove_disconnect(move);
     }
+
+	psmove_shutdown();
 
     return EXIT_SUCCESS;
 }

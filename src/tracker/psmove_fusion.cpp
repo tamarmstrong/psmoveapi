@@ -118,9 +118,9 @@ psmove_fusion_get_position(PSMoveFusion *fusion, PSMove *move,
 
     float winX = (float)camX;
     float winY = fusion->height - (float)camY;
-    float winZ = .5; /* start value for binary search */
+    float winZ = .5f; /* start value for binary search */
 
-    float targetWidth = 2.*camR;
+    float targetWidth = 2.f*camR;
 
     glm::vec3 obj;
 
