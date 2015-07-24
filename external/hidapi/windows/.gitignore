@@ -1,0 +1,15 @@
+*.exp
+*.ilk
+*.suo
+*.vcproj.*
+*.ncb
+*.suo
+*.pdb
+.deps
+.libs
+*.lo
+*.la
+*.obj
+*.log
+*.tlog
+*.lastbuildstate

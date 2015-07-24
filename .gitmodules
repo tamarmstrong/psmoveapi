@@ -1,6 +1,0 @@
-[submodule "external/hidapi"]
-	path = external/hidapi
-	url = git://github.com/signal11/hidapi.git
-[submodule "external/PS3EYEDriver"]
-	path = external/PS3EYEDriver
-	url = git://github.com/thp/PS3EYEDriver.git
