@@ -31,7 +31,6 @@
 #include <stdio.h>
 
 #include <time.h>
-#include <unistd.h>
 #include <assert.h>
 
 #include "opencv2/core/core_c.h"
@@ -40,11 +39,17 @@
 #include "psmove.h"
 #include "psmove_tracker.h"
 
+#define MAX_CONTROLLERS 8
 
 int main(int arg, char** args) {
+	if (!psmove_init(PSMOVE_CURRENT_VERSION)) {
+		fprintf(stderr, "PS Move API init failed (wrong version?)\n");
+		exit(1);
+	}
+
     int i;
     int count = psmove_count_connected();
-    PSMove* controllers[count];
+	PSMove* controllers[MAX_CONTROLLERS];
 
     printf("### Found %d controllers.\n", count);
     if (count == 0) {
@@ -87,6 +92,9 @@ int main(int arg, char** args) {
         }
     }
 
+	psmove_tracker_set_exposure(tracker, Exposure_LOW);  //Exposure_LOW, Exposure_MEDIUM, Exposure_HIGH
+	psmove_tracker_set_dimming(tracker, 1.0f);	
+	
     while ((cvWaitKey(1) & 0xFF) != 27) {
         psmove_tracker_update_image(tracker);
         psmove_tracker_update(tracker, NULL);
@@ -116,6 +124,8 @@ int main(int arg, char** args) {
     }
 
     psmove_tracker_free(tracker);
+	psmove_shutdown();
+
     return 0;
 }
 

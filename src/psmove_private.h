@@ -39,7 +39,17 @@ extern "C" {
 #include <stdio.h>
 #include <wchar.h>
 #include <time.h>
+
+#ifdef CMAKE_BUILD
 #include <pthread.h> /* for timespec on Windows */
+#endif
+
+
+#ifdef _MSC_BUILD
+#define __PSMOVE_FUNCTION__ __FUNCTION__
+#else
+#define __PSMOVE_FUNCTION__ __func__
+#endif
 
     /**
      * PRIVATE DEFINITIONS FOR USE IN psmove.c AND psmove_*.c
@@ -74,13 +84,13 @@ extern "C" {
 #define psmove_CRITICAL(x) \
         psmove_PRINTF("PSMOVE CRITICAL", \
                 "Assertion fail in %s: %s\n", \
-                __func__, x)
+                __PSMOVE_FUNCTION__, x)
 
 /* Macro: Deprecated functions */
 #define psmove_DEPRECATED(x) \
         psmove_PRINTF("PSMOVE DEPRECATED", \
                 "%s is deprecated: %s\n", \
-                __func__, x)
+                __PSMOVE_FUNCTION__, x)
 
 /* Macros: Return immediately if an assertion fails + log */
 #define psmove_return_if_fail(expr) \
@@ -188,19 +198,6 @@ ADDCALL _psmove_normalize_btaddr(const char *addr, int lowercase, char separator
  **/
 ADDAPI int
 ADDCALL _psmove_read_btaddrs(PSMove *move, PSMove_Data_BTAddr *host, PSMove_Data_BTAddr *controller);
-
-
-/* Performance measurement structures and functions */
-typedef struct timespec PSMove_timestamp;
-
-ADDAPI PSMove_timestamp
-ADDCALL _psmove_timestamp();
-
-ADDAPI PSMove_timestamp
-ADDCALL _psmove_timestamp_diff(PSMove_timestamp a, PSMove_timestamp b);
-
-ADDAPI double
-ADDCALL _psmove_timestamp_value(PSMove_timestamp ts);
 
 
 /* Misc utility functions */

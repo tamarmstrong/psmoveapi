@@ -27,10 +27,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  **/
 
-
-
-
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -40,6 +36,11 @@ int main(int argc, char* argv[])
 {
     PSMove *move;
     int i, c;
+
+	if (!psmove_init(PSMOVE_CURRENT_VERSION)) {
+		fprintf(stderr, "PS Move API init failed (wrong version?)\n");
+		exit(1);
+	}
 
     c = psmove_count_connected();
     printf("Connected controllers: %d\n", c);
@@ -72,6 +73,8 @@ int main(int argc, char* argv[])
         psmove_update_leds(move);
         psmove_disconnect(move);
     }
+
+	psmove_shutdown();
 
     return 0;
 }

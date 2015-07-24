@@ -30,7 +30,6 @@
 #include <stdio.h>
 
 #include <time.h>
-#include <unistd.h>
 #include <assert.h>
 
 #include "opencv2/core/core_c.h"
@@ -39,9 +38,16 @@
 #include "psmove.h"
 #include "psmove_tracker.h"
 
+#define MAX_CONTROLLERS 8
+
 int main(int arg, char** args) {
+	if (!psmove_init(PSMOVE_CURRENT_VERSION)) {
+		fprintf(stderr, "PS Move API init failed (wrong version?)\n");
+		exit(1);
+	}
+
     int count = psmove_count_connected();
-    PSMove *moves[count];
+	PSMove *moves[MAX_CONTROLLERS];
 
     int i;
     void *frame;
@@ -91,6 +97,8 @@ int main(int arg, char** args) {
     }
 
     psmove_tracker_free(tracker);
+	psmove_shutdown();
+
     return 0;
 }
 

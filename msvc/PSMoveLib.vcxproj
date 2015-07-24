@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\external\iniparser\dictionary.h" />
+    <ClInclude Include="..\external\iniparser\iniparser.h" />
+    <ClInclude Include="..\external\PS3EYEDriver\src\ps3eyedriver.h" />
+    <ClInclude Include="..\include\psmove.h" />
+    <ClInclude Include="..\include\psmove_file.h" />
+    <ClInclude Include="..\include\psmove_platform_config.h" />
+    <ClInclude Include="..\include\psmove_time.h" />
+    <ClInclude Include="..\include\psmove_tracker.h" />
+    <ClInclude Include="..\src\daemon\moved_client.h" />
+    <ClInclude Include="..\src\daemon\moved_monitor.h" />
+    <ClInclude Include="..\src\daemon\psmove_moved_protocol.h" />
+    <ClInclude Include="..\src\platform\psmove_winsupport.h" />
+    <ClInclude Include="..\src\psmove_calibration.h" />
+    <ClInclude Include="..\src\psmove_private.h" />
+    <ClInclude Include="..\src\tracker\camera_control.h" />
+    <ClInclude Include="..\src\tracker\camera_control_private.h" />
+    <ClInclude Include="..\src\tracker\psmove_tracker_private.h" />
+    <ClInclude Include="..\src\tracker\tracker_helpers.h" />
+    <ClInclude Include="..\src\tracker\tracker_trace.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\external\iniparser\dictionary.c" />
+    <ClCompile Include="..\external\iniparser\iniparser.c" />
+    <ClCompile Include="..\src\daemon\moved_client.c" />
+    <ClCompile Include="..\src\daemon\moved_monitor.c" />
+    <ClCompile Include="..\src\platform\psmove_winsupport.c" />
+    <ClCompile Include="..\src\psmove.c" />
+    <ClCompile Include="..\src\psmove_calibration.c" />
+    <ClCompile Include="..\src\psmove_file.c" />
+    <ClCompile Include="..\src\psmove_orientation.c" />
+    <ClCompile Include="..\src\psmove_time.c" />
+    <ClCompile Include="..\src\tracker\camera_control.c" />
+    <ClCompile Include="..\src\tracker\platform\camera_control_win32.c" />
+    <ClCompile Include="..\src\tracker\psmove_fusion.cpp" />
+    <ClCompile Include="..\src\tracker\psmove_tracker.c" />
+    <ClCompile Include="..\src\tracker\tracker_helpers.c" />
+    <ClCompile Include="..\src\tracker\tracker_trace.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{664E6B92-D769-494E-B7A1-7E573BAFE4F5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PSMoveLib</RootNamespace>
+    <ProjectName>psmoveapi</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\objects\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\objects\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\objects\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\$(Platform)\$(Configuration)\objects\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;CAMERA_CONTROL_USE_CL_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;_USRDLL;DEBUG_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opencv_world300d.lib;CLEyeMulticam.lib;hidapi.lib;Bthprops.lib;Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Win32\Debug\lib;..\external\OpenCV\x86\vc12\lib;..\external\CLEye\x86\lib;..\external\hidapi\windows\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Message>Copy DLLs needed by PSMoveLib to Win32\Debug</Message>
+      <Command>DebugWin32Prebuild.bat</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;CAMERA_CONTROL_USE_CL_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opencv_world300.lib;CLEyeMulticam.lib;hidapi.lib;Bthprops.lib;Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Win32\Release\lib;..\external\OpenCV\x86\vc12\lib;..\external\CLEye\x86\lib;..\external\hidapi\windows\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>ReleaseWin32Prebuild.bat</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Copy DLLs needed by PSMoveLib to Win32\Release</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;PSMOVE_USE_PSEYE;CAMERA_CONTROL_USE_PS3EYE_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;_USRDLL;DEBUG_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\PS3EYEDriver\src; ..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opencv_world300d.lib;libusb-1.0.lib;PS3EyeDriver.lib;hidapi.lib;Bthprops.lib;Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\x64\Debug\lib;..\external\PS3EYEDriver\x64\Debug;..\external\OpenCV\x64\vc12\lib;..\external\libusb-1.0.9\x64\Debug\lib;..\external\hidapi\windows\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>DebugX64Prebuild.bat</Command>
+      <Message>Copy DLLs needed by PSMoveLib to X64\Debug</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;PSMOVE_USE_PSEYE;CAMERA_CONTROL_USE_PS3EYE_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\PS3EYEDriver\src;..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opencv_world300.lib;PS3EyeDriver.lib;libusb-1.0.lib;hidapi.lib;Bthprops.lib;Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\x64\Release\lib;..\external\PS3EYEDriver\x64\Release;..\external\OpenCV\x64\vc12\lib;..\external\libusb-1.0.9\x64\Release\lib;..\external\hidapi\windows\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>ReleaseX64Prebuild.bat</Command>
+      <Message>Copy DLLs needed by PSMoveLib to X64\Release</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

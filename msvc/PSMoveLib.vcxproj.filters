@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\tracker">
+      <UniqueIdentifier>{cff21dc2-520e-4e9b-a4d1-475a339d878d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tracker">
+      <UniqueIdentifier>{b81f8856-c623-4b60-b7df-b7a5ed94b61a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\iniparser">
+      <UniqueIdentifier>{2ae85665-d1d9-4cc7-8d40-4a298a56f45e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\iniparser">
+      <UniqueIdentifier>{fb8ba522-f436-4ad7-8159-4f749b7a0f70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ps3eyedriver">
+      <UniqueIdentifier>{6a48c6b7-452e-447c-9fa4-3454a92749ff}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\psmove.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\platform\psmove_winsupport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\psmove_private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\daemon\moved_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\daemon\moved_monitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\psmove_calibration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\daemon\psmove_moved_protocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\psmove_tracker.h">
+      <Filter>Header Files\tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tracker\camera_control.h">
+      <Filter>Header Files\tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tracker\camera_control_private.h">
+      <Filter>Header Files\tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tracker\psmove_tracker_private.h">
+      <Filter>Header Files\tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tracker\tracker_helpers.h">
+      <Filter>Header Files\tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tracker\tracker_trace.h">
+      <Filter>Header Files\tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\psmove_time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\iniparser\dictionary.h">
+      <Filter>Header Files\iniparser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\iniparser\iniparser.h">
+      <Filter>Header Files\iniparser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\psmove_file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\PS3EYEDriver\src\ps3eyedriver.h">
+      <Filter>Header Files\ps3eyedriver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\psmove_platform_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\tracker\psmove_fusion.cpp">
+      <Filter>Source Files\tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tracker\camera_control.c">
+      <Filter>Source Files\tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tracker\platform\camera_control_win32.c">
+      <Filter>Source Files\tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tracker\psmove_tracker.c">
+      <Filter>Source Files\tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tracker\tracker_helpers.c">
+      <Filter>Source Files\tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tracker\tracker_trace.c">
+      <Filter>Source Files\tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\psmove_orientation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\platform\psmove_winsupport.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\psmove_calibration.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\daemon\moved_client.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\daemon\moved_monitor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\psmove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\psmove_time.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\iniparser\dictionary.c">
+      <Filter>Source Files\iniparser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\iniparser\iniparser.c">
+      <Filter>Source Files\iniparser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\psmove_file.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

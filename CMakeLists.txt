@@ -64,9 +64,6 @@ option(PSMOVE_USE_DEBUG "Build for debugging" OFF)
 # Write debugging images for tracking calibration to home directory
 option(PSMOVE_USE_TRACKER_TRACE "Write tracker calibration images to disk" OFF)
 
-# Madgwick's orientation algorithm (GPL-licensed)
-option(PSMOVE_USE_MADGWICK_AHRS "Use AHRS algorithm (GPL license)" OFF)
-
 # We recommend using MinGW-w64 for the Windows builds which generates
 # position-independent code by default, so skip this for Windows builds.
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows")
@@ -96,23 +93,13 @@ else()
 endif()
 
 # AHRS algorithm
-if(PSMOVE_USE_MADGWICK_AHRS)
-    add_definitions(-DPSMOVE_WITH_MADGWICK_AHRS)
-    set(INFO_LICENSE "GPL")
-    set(INFO_AHRS_ALGORITHM "Madgwick AHRS")
-    set(PSMOVEAPI_ALGORITHM_SRC
-        ${PSMOVEAPI_SOURCE_DIR}/external/MadgwickAHRS/MadgwickAHRS.c
-    )
+if (PSMOVE_USE_PS3EYE_DRIVER)
+	# PS3EYEDriver is based on GPL'd code as well
+	set(INFO_LICENSE "GPL")
 else()
-    if (PSMOVE_USE_PS3EYE_DRIVER)
-        # PS3EYEDriver is based on GPL'd code as well
-        set(INFO_LICENSE "GPL")
-    else()
-        set(INFO_LICENSE "BSD")
-    endif()
-    set(INFO_AHRS_ALGORITHM "None")
-    set(PSMOVEAPI_ALGORITHM_SRC)
+	set(INFO_LICENSE "BSD")
 endif()
+set(PSMOVEAPI_ALGORITHM_SRC)
 
 # Linker commands to put into the .pc file (when installing)
 set(PSMOVEAPI_PKGCONFIG_LIBS "-lpsmoveapi")
@@ -190,7 +177,7 @@ if (PSMOVE_USE_DEBUG_CAPTURE)
 endif()
 
 set(INFO_USE_CL_EYE_SDK "No (Windows only)")
-set(INFO_USE_PS3EYE_DRIVER "No (OS X only)")
+set(INFO_USE_PS3EYE_DRIVER "No")
 set(INFO_BLUEZ5_SUPPORT "No")
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -277,6 +264,20 @@ ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     else()
         set(INFO_USE_CL_EYE_SDK "No (disabled)")
     ENDIF()
+	
+    if(PSMOVE_USE_PS3EYE_DRIVER)
+        add_definitions(-DCAMERA_CONTROL_USE_PS3EYE_DRIVER)
+        list(APPEND PSMOVEAPI_TRACKER_PLATFORM_SRC
+			${PSMOVEAPI_SOURCE_DIR}/external/PS3EYEDriver/src/ps3eyedriver.c)
+        include_directories(${PSMOVEAPI_SOURCE_DIR}/external/PS3EYEDriver/src)
+		
+        # Assume the user has built libusb in external/libusb-1.0.9/
+        set(INFO_USE_PS3EYE_DRIVER "Yes (static local built libusb)")
+        list(APPEND PSMOVEAPI_TRACKER_REQUIRED_LIBS ${PSMOVEAPI_SOURCE_DIR}/external/libusb-1.0.9/libusb/.libs/libusb-1.0.a)
+        include_directories(${PSMOVEAPI_SOURCE_DIR}/external/libusb-1.0.9/libusb)
+    else()
+        set(INFO_USE_PS3EYE_DRIVER "No (disabled)")
+    endif()	
 
     set(HIDAPI_SRC ${PSMOVEAPI_SOURCE_DIR}/external/hidapi/windows/hid.c)
 
@@ -688,7 +689,6 @@ message("")
 message("  Build configuration")
 message("    Debug build:      " ${INFO_USE_DEBUG})
 message("    Tracker library:  " ${INFO_BUILD_TRACKER})
-message("    AHRS algorithm:   " ${INFO_AHRS_ALGORITHM})
 message("    Library license:  " ${INFO_LICENSE} " (see README for details)")
 message("    BlueZ 5 support:  " ${INFO_BLUEZ5_SUPPORT} " (for pairing on Linux only)")
 message("")

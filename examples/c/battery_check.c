@@ -26,7 +26,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  **/
 
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -87,7 +86,7 @@ int main(int argc, char* argv[])
             if(buttons & Btn_PS)
                 running = false;
         }
-        sleep(1);
+		psmove_sleep(1);
     }
 
     for(i=0; i<c; i++) {
@@ -95,5 +94,8 @@ int main(int argc, char* argv[])
     }
 
     free(moves);
+
+	psmove_shutdown();
+
     return 0;
 }
