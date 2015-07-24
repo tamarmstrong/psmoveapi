@@ -1,0 +1,11 @@
+;msvc intermediate files
+*.log
+*.obj
+*.tlog
+*.lastbuildstate
+*.ilk
+*.pdb
+*.user
+*.sdf
+*.idb
+*.suo
