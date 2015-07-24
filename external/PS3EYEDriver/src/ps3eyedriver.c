@@ -558,6 +558,7 @@ ps3eye_open(uint32_t cameraID, uint32_t frame_width, uint32_t frame_height, uint
 	if (!success)
 	{
 		ps3eye_close(camera);
+		camera = NULL;
 	}
 	
 	return camera;

@@ -95,6 +95,14 @@ main(int argc, char *argv[])
     }
 
 	ctx.eye = ps3eye_open(0, ctx.frame_width, ctx.frame_height, ctx.frame_rate);
+	if (ctx.eye == NULL)
+	{
+		printf("Failed to initialize camera: %s\n");
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		return EXIT_FAILURE;
+	}
+
 	ps3eye_set_flip(ctx.eye, true, false);
 
 	printf("Camera mode: %dx%d@%d\n", ctx.frame_width, ctx.frame_height, ctx.frame_rate);
