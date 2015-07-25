@@ -129,7 +129,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;CAMERA_CONTROL_USE_CL_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;_USRDLL;DEBUG_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\external\;..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\libusb-1.0.19\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,7 +151,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;CAMERA_CONTROL_USE_CL_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\external\;..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\libusb-1.0.19\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,13 +175,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;PSMOVE_USE_PSEYE;CAMERA_CONTROL_USE_PS3EYE_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;_USRDLL;DEBUG_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\external\;..\external\PS3EYEDriver\src; ..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\PS3EYEDriver\src; ..\external\libusb-1.0.19\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opencv_world300d.lib;libusb-1.0.lib;PS3EyeDriver.lib;hidapi.lib;Bthprops.lib;Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\x64\Debug\lib;..\external\PS3EYEDriver\x64\Debug;..\external\OpenCV\x64\vc12\lib;..\external\libusb-1.0.9\x64\Debug\lib;..\external\hidapi\windows\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\x64\Debug\lib;..\external\PS3EYEDriver\x64\Debug;..\external\OpenCV\x64\vc12\lib;..\external\libusb-1.0.19\x64\Debug\dll;..\external\hidapi\windows\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>DebugX64Prebuild.bat</Command>
@@ -197,7 +197,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>BUILDING_SHARED_LIBRARY;PSMOVE_USE_PSEYE;CAMERA_CONTROL_USE_PS3EYE_DRIVER;PSMOVE_BUILD_TRACKER;_USE_MATH_DEFINES;WIN32;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\external\;..\external\PS3EYEDriver\src;..\external\libusb-1.0.9\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\external\;..\external\PS3EYEDriver\src;..\external\libusb-1.0.19\libusb;..\external\OpenCV\include;..\external\hidapi\hidapi;..\external\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -205,7 +206,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opencv_world300.lib;PS3EyeDriver.lib;libusb-1.0.lib;hidapi.lib;Bthprops.lib;Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\x64\Release\lib;..\external\PS3EYEDriver\x64\Release;..\external\OpenCV\x64\vc12\lib;..\external\libusb-1.0.9\x64\Release\lib;..\external\hidapi\windows\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\x64\Release\lib;..\external\PS3EYEDriver\x64\Release;..\external\OpenCV\x64\vc12\lib;..\external\libusb-1.0.19\x64\Release\dll;..\external\hidapi\windows\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>ReleaseX64Prebuild.bat</Command>
